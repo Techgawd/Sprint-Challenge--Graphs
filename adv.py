@@ -28,6 +28,14 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+# holds the visited rooms
+visited = {}
+# create a list for path
+my_path = []
+# list of reverse commands to enable going backwards
+reverse_direction = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+# appending current room to 'visited;
+visited[player.current_room.id] = player.current_room.get_exits()
 
 
 

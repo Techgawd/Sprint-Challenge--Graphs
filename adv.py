@@ -10,7 +10,7 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-# map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt" 
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
@@ -25,9 +25,49 @@ world.print_rooms()
 
 player = Player(world.starting_room)
 
+# You may find the commands player.current_room.id/ROOM ID, player.current_room.get_exits() and player.travel(direction) useful.
+
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+# holds the visited rooms
+visited = {}
+# create a list for path
+my_path = []
+# list of reverse commands to enable going backwards
+reverse_direction = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+# appending current room to 'visited;
+visited[player.current_room.id] = player.current_room.get_exits()
+
+# traverse if length of visited room is < than length of room
+# implement depth first search
+while len(visited) < len(room_graph) - 1:
+    # see if room is in visted dictionary
+    if player.current_room.id not in visited:
+        # lets add current_room to the dictionary
+        visited[player.current_room.id] = player.current_room.get_exits()
+        # obtain the previous direction
+        previous_direction = my_path[-1]
+        # removing and avoid going previous directions
+        visited[player.current_room.id].remove(previous_direction)
+
+    # this changes the traversal through all rooms
+    while len(visited[player.current_room.id]) == 0:
+        # removes the previous exits with pop()
+        previous_direction = my_path.pop()
+        # adding last exits towards traversal path
+        traversal_path.append(previous_direction)
+        # review rooms visited
+        player.travel(previous_direction)
+    #looks into current_room and finds last room on the list
+    next_move = visited[player.current_room.id].pop(0)
+    # appends next_move in the right path
+    traversal_path.append(next_move)
+    # appends the specific record on next_move
+    my_path.append(reverse_direction[next_move])
+    # use the directions dictionary to go backwards through rooms
+    player.travel(next_move)
+    #should pass mvp
 
 
 
